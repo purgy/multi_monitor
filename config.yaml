@@ -1,0 +1,5 @@
+hotkeys:
+  lock/unlock mouse cursor on current monitor: <ctrl>+<alt>+l
+  move mouse cursor to next monitor: <ctrl>+<cmd>+<right>
+  move mouse cursor to previous monitor: <ctrl>+<cmd>+<left>
+is cross screen ranges by pressed ctrl key: true
