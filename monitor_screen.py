@@ -75,3 +75,22 @@ class MonitorScreen:
         absolute_x: int = int(relative_position[0] * int(self.monitor.width) + self.x_start)
         absolute_y: int = int(relative_position[1] * int(self.monitor.height) + self.y_start)
         return absolute_x, absolute_y
+
+    @staticmethod
+    def sort_monitor_screens(
+        monitor_screens: list["MonitorScreen"], monitor_numbers: dict[str, int]
+    ) -> list["MonitorScreen"]:
+        # DP-2: 0
+        # DP-4: 2
+        # HDMI-0: 1
+        monitors: list[dict[str, str | int]] = []
+        for name, number in monitor_numbers.items():
+            monitors.append({"name": name, "number": number})
+        monitors.sort(key=lambda x: x["number"])
+        monitor_names_sorted = [monitor["name"] for monitor in monitors]
+        monitor_names_sorted_dict = {monitor: i for i, monitor in enumerate(monitor_names_sorted)}
+
+        for monitor_screen in monitor_screens:
+            monitor_screen.number = monitor_names_sorted_dict[str(monitor_screen.monitor.name)]
+
+        return sorted(monitor_screens, key=lambda x: x.number)
