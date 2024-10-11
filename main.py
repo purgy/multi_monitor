@@ -61,16 +61,12 @@ class Application:
         logger.debug(f"self.config: {self.config}")
         logger.debug(f"self.monitor_screens: {self.monitor_screens}")
 
-    def on_keyboard_press(self, key: pynput.keyboard.Key) -> None:
+    def on_keyboard_press(self, key: pynput.keyboard.Key | pynput.keyboard.KeyCode | None) -> None:
         if self.config.is_cross_by_ctrl and key == pynput.keyboard.Key.ctrl and self.is_block_mouse:
             self.is_block_mouse = False
             self.is_mouse_block_switched_off_temproraly = True
-        # kb = pynput.keyboard.Controller()
-        # if kb.ctrl_pressed and kb.shift_pressed:
-        #     print("Shift + Ctrl pressed")
-        #     self.is_shift_and_ctrl_pressed = True
 
-    def on_keyboard_release(self, key: pynput.keyboard.Key) -> None:
+    def on_keyboard_release(self, key: pynput.keyboard.Key | pynput.keyboard.KeyCode | None) -> None:
         if (
             self.config.is_cross_by_ctrl
             and key == pynput.keyboard.Key.ctrl
@@ -78,10 +74,6 @@ class Application:
         ):
             self.is_block_mouse = True
             self.is_mouse_block_switched_off_temproraly = False
-        # kb = pynput.keyboard.Controller()
-        # if not kb.ctrl_pressed or not kb.shift_pressed:
-        #     print("Shift + Ctrl NOT pressed")
-        #     self.is_shift_and_ctrl_pressed = False
 
     def on_mouse_cursor_move(self, x: int, y: int) -> None:
         Logger.bind_logger(is_block_mouse=self.is_block_mouse)
@@ -116,13 +108,6 @@ class Application:
         Notification.send(message="Moving cursor to next monitor")
         self.move_cursor_to_monitor((self.current_monitor_index + 1) % len(self.monitor_screens))
 
-    # def on_mouse_scroll(self, x: int, y: int, dx: int, dy: int) -> None:
-    #     if self.is_shift_and_ctrl_pressed:
-    #         if dy < 0:
-    #             self.move_cursor_to_previous_monitor()
-    #         if dy > 0:
-    #             self.move_cursor_to_next_monitor()
-
     def on_hotkey_lock_mouse_cursor(self):
         self.is_block_mouse = not self.is_block_mouse
         message = "Cursor is locked inside monitor"
@@ -132,12 +117,6 @@ class Application:
         logger.debug(
             f"{self.config.hotkey_lock_cursor_current_monitor} pressed. self.is_block_mouse={self.is_block_mouse}"
         )
-        # self.mouse_cursor_position = Mouse.get_mouse_cursor_position()
-        # print(f"self.mouse_cursor_position: {self.mouse_cursor_position}")
-        # self.current_monitor_index = MonitorScreen.get_current_monitor_index(
-        #     self.mouse_cursor_position, self.monitor_screens
-        # )
-        # print(f"self.current_monitor_index: {self.current_monitor_index}")
 
     def move_cursor_to_monitor(self, monitor_index: int):
         self.mouse_cursor_position = Mouse.get_mouse_cursor_position()
@@ -162,9 +141,6 @@ class Application:
         self.move_cursor_to_previous_monitor()
 
     def run(self):
-
-
-
         with pynput.keyboard.Listener(
             on_press=self.on_keyboard_press, on_release=self.on_keyboard_release
         ) as keyboard_listener:
