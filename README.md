@@ -6,10 +6,10 @@
 + The ability to lock the mouse cursor within one monitor
 
 Default hotkeys:
-+ lock/unlock mouse cursor on current monitor: <ctrl>+<alt>+L
-+ move mouse cursor to next monitor: <ctrl>+<cmd>+<right>
-+ move mouse cursor to previous monitor: <ctrl>+<cmd>+<left>
-+ exit: <ctrl>+<f12>
++ lock/unlock mouse cursor on current monitor: ```<ctrl>+<alt>+L```
++ move mouse cursor to next monitor: ```<ctrl>+<cmd>+<right>```
++ move mouse cursor to previous monitor: ```<ctrl>+<cmd>+<left>```
++ exit: ```<ctrl>+<f12>```
 
 ### Running
 #### Ubuntu
@@ -24,7 +24,7 @@ pipx install ~/Downloads/multi_monitor/
 multi_monitor
 ```
 
-Default config file will be created: ~/multi_monitor_config.yaml
+Default config file will be created: ```~/multi_monitor_config.yaml```
 
 ## ru
 ### Возможности
@@ -32,10 +32,10 @@ Default config file will be created: ~/multi_monitor_config.yaml
 + Возможность блокировки курсора мыши в пределах одного монитора
 
 Предустановленные горячие клавиши:
-+ блокировка/разблокировка курсора мыши на текущем мониторе: <ctrl>+<alt>+L
-+ перемещение курсора мыши на следующий монитор: <ctrl>+<cmd>+<право>
-+ перемещение курсора мыши на предыдущий монитор: <ctrl>+<cmd>+<лево>
-+ выход: <ctrl>+<f12>
++ блокировка/разблокировка курсора мыши на текущем мониторе: ```<ctrl>+<alt>+L```
++ перемещение курсора мыши на следующий монитор: ```<ctrl>+<cmd>+<право>```
++ перемещение курсора мыши на предыдущий монитор: ```<ctrl>+<cmd>+<лево>```
++ выход: ```<ctrl>+<f12>```
 
 ### Запуск
 #### Ubuntu
@@ -50,4 +50,4 @@ pipx install ~/Downloads/multi_monitor/
 multi_monitor
 ```
 
-Будет создан файл настроек по умолчанию: ~/multi_monitor_config.yaml
+Будет создан файл настроек по умолчанию: ```~/multi_monitor_config.yaml```
