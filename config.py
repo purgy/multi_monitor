@@ -9,16 +9,25 @@ from monitor_screen import MonitorScreen
 
 logger = Logger.get_logger(__name__)
 
+DEFAULT_HOTKEY_NEXT_MONITOR: str = "<ctrl>+<cmd>+<right>"
+DEFAULT_HOTKEY_PREVIOUS_MONITOR: str = "<ctrl>+<cmd>+<left>"
+DEFAULT_HOTKEY_LOCK_CURSOR_CURRENT_MONITOR: str = "<ctrl>+<alt>+l"
+DEFAULT_HOTKEY_EXIT: str = "<ctrl>+f12"
+DEFAULT_IS_CROSS_BY_CTRL: bool = True
+DEFAULT_MONITOR_NUMBERS: dict[str, dict[str, int]] | None = None
+DEFAULT_PADDING: int = 3
+
+
 @dataclasses.dataclass
 class Config:
     """Class for working with configuration file"""
-    hotkey_next_monitor: str = "<ctrl>+<cmd>+<right>"
-    hotkey_previous_monitor: str = "<ctrl>+<cmd>+<left>"
-    hotkey_lock_cursor_current_monitor: str = "<ctrl>+<alt>+l"
-    hotkey_exit: str = "<ctrl>+f12"
-    is_cross_by_ctrl: bool = True
-    monitor_numbers: dict[str, dict[str, int]] | None = None
-    padding: int = 3
+    hotkey_next_monitor: str = DEFAULT_HOTKEY_NEXT_MONITOR
+    hotkey_previous_monitor: str = DEFAULT_HOTKEY_PREVIOUS_MONITOR
+    hotkey_lock_cursor_current_monitor: str = DEFAULT_HOTKEY_LOCK_CURSOR_CURRENT_MONITOR
+    hotkey_exit: str = DEFAULT_HOTKEY_EXIT
+    is_cross_by_ctrl: bool = DEFAULT_IS_CROSS_BY_CTRL
+    monitor_numbers: dict[str, dict[str, int]] | None = DEFAULT_MONITOR_NUMBERS
+    padding: int = DEFAULT_PADDING
 
     @staticmethod
     def load_config(config_file: str | None) -> "Config":
@@ -29,13 +38,19 @@ class Config:
             config_dict = yaml.load(f, Loader=yaml.SafeLoader)
         logger.debug(f"config_dict: {config_dict}")
         return Config(
-            hotkey_next_monitor=config_dict["hotkeys"]["move mouse cursor to next monitor"],
-            hotkey_previous_monitor=config_dict["hotkeys"]["move mouse cursor to previous monitor"],
-            hotkey_lock_cursor_current_monitor=config_dict["hotkeys"]["lock/unlock mouse cursor on current monitor"],
-            hotkey_exit=config_dict["hotkeys"]["exit"],
-            is_cross_by_ctrl=config_dict["is cross screen ranges by pressed ctrl key"],
-            monitor_numbers=config_dict.get("monitor numbers", None),
-            padding=int(config_dict.get("padding", 3)),
+            hotkey_next_monitor=config_dict.get("hotkeys", DEFAULT_HOTKEY_NEXT_MONITOR).get(
+                "move mouse cursor to next monitor", DEFAULT_HOTKEY_NEXT_MONITOR
+            ),
+            hotkey_previous_monitor=config_dict.get("hotkeys", DEFAULT_HOTKEY_PREVIOUS_MONITOR).get(
+                "move mouse cursor to previous monitor", DEFAULT_HOTKEY_PREVIOUS_MONITOR
+            ),
+            hotkey_lock_cursor_current_monitor=config_dict.get(
+                "hotkeys", DEFAULT_HOTKEY_LOCK_CURSOR_CURRENT_MONITOR
+            ).get("lock/unlock mouse cursor on current monitor", DEFAULT_HOTKEY_LOCK_CURSOR_CURRENT_MONITOR),
+            hotkey_exit=config_dict.get("hotkeys", DEFAULT_HOTKEY_EXIT).get("exit", DEFAULT_HOTKEY_EXIT),
+            is_cross_by_ctrl=config_dict.get("is cross screen ranges by pressed ctrl key", DEFAULT_IS_CROSS_BY_CTRL),
+            monitor_numbers=config_dict.get("monitor numbers", DEFAULT_MONITOR_NUMBERS),
+            padding=int(config_dict.get("padding", DEFAULT_PADDING)),
         )
 
     def to_config_dict(self) -> dict[str, typing.Any]:
@@ -44,6 +59,7 @@ class Config:
                 "move mouse cursor to next monitor": self.hotkey_next_monitor,
                 "move mouse cursor to previous monitor": self.hotkey_previous_monitor,
                 "lock/unlock mouse cursor on current monitor": self.hotkey_lock_cursor_current_monitor,
+                "exit": self.hotkey_exit,
             },
             "is cross screen ranges by pressed ctrl key": self.is_cross_by_ctrl,
             "monitor numbers": self.monitor_numbers,

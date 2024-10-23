@@ -2,10 +2,10 @@
 
 ## en
 ### Features
-+ Moving the mouse cursor between screens using keyboard shortcutsLock/Unlock mouse cursor onto monitor by hotkey
-+ The ability to lock the mouse cursor within one screen
++ Moving the mouse cursor between monitors using keyboard shortcuts
++ The ability to lock the mouse cursor within one monitor
 
 ## ru
 ### Возможности
-+ Перемещение курсора мыши между экранами с помощью горячих клавиш
-+ Возможность блокировки курсора мыши в пределах одного экрана
++ Перемещение курсора мыши между мониторами с помощью горячих клавиш
++ Возможность блокировки курсора мыши в пределах одного монитора

@@ -14,7 +14,7 @@ logger = Logger.get_logger(__name__)
 class Application:
     def __init__(self, config_file: str | None = None) -> None:
         self.is_mouse_block_switched_off_temproraly = False
-        self.config_file: str = config_file
+        self.config_file: str | None = config_file
         self.is_block_mouse: bool = False
         self.is_mouse_block_switched_off_temproraly = False
         self.monitor_screens: list[MonitorScreen] = MonitorScreen.get_all_connected_monitor_screens()
@@ -143,20 +143,38 @@ class Application:
     def on_hotkey_previous_monitor(self):
         self.move_cursor_to_previous_monitor()
 
+    def exit(self):
+        self.keyboard_listener.stop()
+        self.mouse_listener.stop()
+        self.hotkey_listener.stop()
+
+    def on_hotkey_exit(self):
+        logger.debug(f"Pressed: {self.config.hotkey_exit}. Exiting...")
+        self.exit()
+
+    def show_exit_hotkey_notification(self):
+        message = f"Press {self.config.hotkey_exit.upper()} to exit"
+        Notification.send(message=message)
+
     def run(self):
+        self.show_exit_hotkey_notification()
         with pynput.keyboard.Listener(
             on_press=self.on_keyboard_press, on_release=self.on_keyboard_release
         ) as keyboard_listener:
+            self.keyboard_listener = keyboard_listener
             with pynput.mouse.Listener(
                 on_move=self.on_mouse_cursor_move, on_click=self.on_mouse_click
             ) as mouse_listener:
+                self.mouse_listener = mouse_listener
                 with pynput.keyboard.GlobalHotKeys(
                     {
                         f"{self.config.hotkey_next_monitor}": self.on_hotkey_next_monitor,
                         f"{self.config.hotkey_previous_monitor}": self.on_hotkey_previous_monitor,
                         f"{self.config.hotkey_lock_cursor_current_monitor}": self.on_hotkey_lock_mouse_cursor,
+                        f"{self.config.hotkey_exit}": self.on_hotkey_exit,
                     }
                 ) as hotkey_listener:
+                    self.hotkey_listener = hotkey_listener
                     hotkey_listener.join()
                     keyboard_listener.join()
                     mouse_listener.join()
