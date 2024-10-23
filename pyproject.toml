@@ -21,3 +21,6 @@ dependencies = [
 
 [project.scripts]
 multi_monitor = "main:main"
+
+[project.entry-points."multi_monitor"]
+multi_monitor = "main:main"
