@@ -2,11 +2,11 @@ import os
 
 import pynput
 
-from config import Config
-from logger import Logger
-from monitor_screen import MonitorScreen
-from mouse import Mouse
-from notification import Notification
+from src.config import Config
+from src.logger import Logger
+from src.monitor_screen import MonitorScreen
+from src.mouse import Mouse
+from src.notification import Notification
 
 logger = Logger.get_logger(__name__)
 

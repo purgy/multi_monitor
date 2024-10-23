@@ -4,8 +4,8 @@ import typing
 
 import yaml
 
-from logger import Logger
-from monitor_screen import MonitorScreen
+from src.logger import Logger
+from src.monitor_screen import MonitorScreen
 
 logger = Logger.get_logger(__name__)
 
