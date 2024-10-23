@@ -4,10 +4,17 @@ description = "Moving the mouse cursor between monitors using keyboard shortcuts
 version = "0.0.1"
 readme = "README.md"
 keywords = [
-  "mouse",
-  "monitor"
+    "mouse",
+    "monitor"
 ]
 authors = [
-  { name = "purgy", email = "purgy@yandex.ru" },
+    { name = "purgy", email = "purgy@yandex.ru" },
 ]
 requires-python = ">=3.12"
+dependencies = [
+    "notify_py",
+    "pynput",
+    "PyYAML",
+    "screeninfo",
+    "structlog"
+]
