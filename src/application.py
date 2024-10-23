@@ -1,5 +1,3 @@
-import os
-
 import pynput
 
 from src.config import Config
@@ -178,12 +176,3 @@ class Application:
                     hotkey_listener.join()
                     keyboard_listener.join()
                     mouse_listener.join()
-
-
-def main():
-    application = Application(config_file="config.yaml" if os.path.exists("config.yaml") else None)
-    application.run()
-
-
-if __name__ == "__main__":
-    main()

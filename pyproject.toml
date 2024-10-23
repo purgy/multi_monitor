@@ -18,3 +18,6 @@ dependencies = [
     "screeninfo",
     "structlog"
 ]
+
+[project.scripts]
+multi_monitor = "main:main"
