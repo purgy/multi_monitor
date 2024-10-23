@@ -1,3 +1,13 @@
 [project]
 name = "multi_monitor"
+description = "Moving the mouse cursor between monitors using keyboard shortcuts, the ability to lock the mouse cursor within one monitor | Перемещение курсора мыши между мониторами с помощью горячих клавиш, возможность блокировки курсора мыши в пределах одного монитора"
 version = "0.0.1"
+readme = "README.md"
+keywords = [
+  "mouse",
+  "monitor"
+]
+authors = [
+  { name = "purgy", email = "purgy@yandex.ru" },
+]
+requires-python = ">=3.12"
