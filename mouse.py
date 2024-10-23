@@ -2,6 +2,8 @@ import pynput
 
 
 class Mouse:
+    """working with mouse cursor"""
+
     @staticmethod
     def get_mouse_cursor_position() -> tuple[int, int]:
         return pynput.mouse.Controller().position

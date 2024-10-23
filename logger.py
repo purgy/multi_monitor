@@ -5,8 +5,7 @@ class Logger:
     @staticmethod
     def get_logger(name: str):
         """
-        Получает логгер для использования
-        в качестве аргумента принимает имя модуля __name__
+        Retrieves a logger for use as an argument, taking the module name __name__ as input.
         """
         logger = structlog.get_logger(name)
         return logger
@@ -14,6 +13,6 @@ class Logger:
     @staticmethod
     def bind_logger(**kwargs):
         """
-        Закрепляет переменную для логгера, чтобы она выводилась во всех последующих вызовах
+        Binds a variable for the logger so it outputs in all subsequent calls
         """
         return structlog.contextvars.bind_contextvars(**kwargs)

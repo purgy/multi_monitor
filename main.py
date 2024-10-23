@@ -8,24 +8,24 @@ from monitor_screen import MonitorScreen
 from mouse import Mouse
 from notification import Notification
 
-PADDING = 3
-# PADDING = 100  # 100 - for testing on single monitor
 logger = Logger.get_logger(__name__)
 
 
 class Application:
     def __init__(self, config_file: str | None = None) -> None:
+        self.is_mouse_block_switched_off_temproraly = False
         self.config_file: str = config_file
         self.is_block_mouse: bool = False
-        # self.is_shift_and_ctrl_pressed: bool = False
         self.is_mouse_block_switched_off_temproraly = False
         self.monitor_screens: list[MonitorScreen] = MonitorScreen.get_all_connected_monitor_screens()
         self.monitor_numbers_config_name = Config.get_monitor_numbers_config_name(self.monitor_screens)
         self.config = Config.load_config(self.config_file)
         Logger.bind_logger(is_block_mouse=self.is_block_mouse)
         Logger.bind_logger(is_mouse_block_switched_off_temproraly=self.is_mouse_block_switched_off_temproraly)
-        # Если ещё нет monitor_numbers, то создадим запись
+
+        # if there is no monitor_numbers in config, let's create an entry in the config
         is_write_to_config: bool = False
+
         if self.config.monitor_numbers is None:
             self.config.monitor_numbers = {
                 self.monitor_numbers_config_name: {
@@ -35,7 +35,7 @@ class Application:
             }
             is_write_to_config = True
 
-        # Если уже есть, но нет такого набора мониторов, то добавим его
+        # if there's already a record in config but no such monitor set, we will add it
         elif self.monitor_numbers_config_name not in self.config.monitor_numbers.keys():
             self.config.monitor_numbers[self.monitor_numbers_config_name] = {
                 str(monitor_screen.monitor.name): monitor_index
@@ -43,7 +43,7 @@ class Application:
             }
             is_write_to_config = True
 
-        # текущий порядок мониторов из конфига
+        # current monitor order from config
         self.monitor_numbers = self.config.monitor_numbers[self.monitor_numbers_config_name]
 
         if is_write_to_config:
@@ -62,38 +62,41 @@ class Application:
         logger.debug(f"self.monitor_screens: {self.monitor_screens}")
 
     def on_keyboard_press(self, key: pynput.keyboard.Key | pynput.keyboard.KeyCode | None) -> None:
+        """Allow cursor to move freely when Ctrl is pressed, if settings have 'is cross screen ranges by pressed ctrl key' set to True."""
         if self.config.is_cross_by_ctrl and key == pynput.keyboard.Key.ctrl and self.is_block_mouse:
-            self.is_block_mouse = False
             self.is_mouse_block_switched_off_temproraly = True
 
     def on_keyboard_release(self, key: pynput.keyboard.Key | pynput.keyboard.KeyCode | None) -> None:
+        """Block cursor to current monitor Ctrl is released, if settings have 'is cross screen ranges by pressed ctrl key' set to True."""
         if (
             self.config.is_cross_by_ctrl
             and key == pynput.keyboard.Key.ctrl
             and self.is_mouse_block_switched_off_temproraly
         ):
-            self.is_block_mouse = True
+            # self.is_block_mouse = True
             self.is_mouse_block_switched_off_temproraly = False
 
     def on_mouse_cursor_move(self, x: int, y: int) -> None:
+        """When moving the mouse, block it within the current monitor if necessary"""
         Logger.bind_logger(is_block_mouse=self.is_block_mouse)
         Logger.bind_logger(is_mouse_block_switched_off_temproraly=self.is_mouse_block_switched_off_temproraly)
         logger.debug("Mouse moved to ({0}, {1})".format(x, y))
-        if self.is_block_mouse:
+        if self.is_block_mouse and not self.is_mouse_block_switched_off_temproraly:
             current_monitor_screen = self.monitor_screens[self.current_monitor_index]
-            if not current_monitor_screen.is_contains_point(x, y, padding=PADDING):
+            if not current_monitor_screen.is_contains_point(x, y, padding=self.config.padding):
                 nearest_edge_position = current_monitor_screen.get_nearest_edge_position(
-                    position=(x, y), padding=PADDING
+                    position=(x, y), padding=self.config.padding
                 )
                 self.mouse_cursor_position = nearest_edge_position
                 Mouse.move_to(*self.mouse_cursor_position)
-                # pynput.mouse.Controller().position = nearest_edge_position
         else:
             self.mouse_cursor_position = (x, y)
-            # Mouse.move_to(*self.mouse_cursor_position)
             self.current_monitor_index = MonitorScreen.get_current_monitor_index(
                 self.mouse_cursor_position, self.monitor_screens
             )
+
+    def on_mouse_click(self, x: int, y: int, button: pynput.mouse.Button, pressed: bool) -> None:
+        logger.debug("mouse click")
 
     def move_cursor_to_previous_monitor(self):
         logger.debug(f"{self.config.hotkey_previous_monitor} pressed")
@@ -145,7 +148,7 @@ class Application:
             on_press=self.on_keyboard_press, on_release=self.on_keyboard_release
         ) as keyboard_listener:
             with pynput.mouse.Listener(
-                on_move=self.on_mouse_cursor_move  # , on_scroll=self.on_mouse_scroll
+                on_move=self.on_mouse_cursor_move, on_click=self.on_mouse_click
             ) as mouse_listener:
                 with pynput.keyboard.GlobalHotKeys(
                     {

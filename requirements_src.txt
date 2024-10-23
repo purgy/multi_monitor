@@ -1,0 +1,5 @@
+notify_py
+pynput
+PyYAML
+screeninfo
+structlog
