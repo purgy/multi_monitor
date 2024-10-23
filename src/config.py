@@ -1,18 +1,19 @@
 import dataclasses
 import os
+import pathlib
 import typing
 
 import yaml
 
-from src.logger import Logger
-from src.monitor_screen import MonitorScreen
+from logger import Logger
+from monitor_screen import MonitorScreen
 
 logger = Logger.get_logger(__name__)
 
 DEFAULT_HOTKEY_NEXT_MONITOR: str = "<ctrl>+<cmd>+<right>"
 DEFAULT_HOTKEY_PREVIOUS_MONITOR: str = "<ctrl>+<cmd>+<left>"
 DEFAULT_HOTKEY_LOCK_CURSOR_CURRENT_MONITOR: str = "<ctrl>+<alt>+l"
-DEFAULT_HOTKEY_EXIT: str = "<ctrl>+f12"
+DEFAULT_HOTKEY_EXIT: str = "<ctrl>+<f12>"
 DEFAULT_IS_CROSS_BY_CTRL: bool = True
 DEFAULT_MONITOR_NUMBERS: dict[str, dict[str, int]] | None = None
 DEFAULT_PADDING: int = 3
@@ -28,6 +29,11 @@ class Config:
     is_cross_by_ctrl: bool = DEFAULT_IS_CROSS_BY_CTRL
     monitor_numbers: dict[str, dict[str, int]] | None = DEFAULT_MONITOR_NUMBERS
     padding: int = DEFAULT_PADDING
+
+    @staticmethod
+    def get_default_config_file_path() -> str:
+        home_folder = str(pathlib.Path.home())
+        return os.path.join(home_folder, "multi_monitor_config.yaml")
 
     @staticmethod
     def load_config(config_file: str | None) -> "Config":

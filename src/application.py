@@ -1,18 +1,19 @@
 import pynput
 
-from src.config import Config
-from src.logger import Logger
-from src.monitor_screen import MonitorScreen
-from src.mouse import Mouse
-from src.notification import Notification
+from config import Config
+from logger import Logger
+from monitor_screen import MonitorScreen
+from mouse import Mouse
+from notification import Notification
 
 logger = Logger.get_logger(__name__)
 
 
 class Application:
     def __init__(self, config_file: str | None = None) -> None:
+
         self.is_mouse_block_switched_off_temproraly = False
-        self.config_file: str | None = config_file
+        self.config_file: str | None = config_file if config_file is not None else Config.get_default_config_file_path()
         self.is_block_mouse: bool = False
         self.is_mouse_block_switched_off_temproraly = False
         self.monitor_screens: list[MonitorScreen] = MonitorScreen.get_all_connected_monitor_screens()
@@ -173,6 +174,6 @@ class Application:
                     }
                 ) as hotkey_listener:
                     self.hotkey_listener = hotkey_listener
-                    hotkey_listener.join()
                     keyboard_listener.join()
                     mouse_listener.join()
+                    hotkey_listener.join()

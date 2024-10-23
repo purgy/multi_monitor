@@ -11,6 +11,21 @@ Default hotkeys:
 + move mouse cursor to previous monitor: <ctrl>+<cmd>+<left>
 + exit: <ctrl>+<f12>
 
+### Running
+#### Ubuntu
+```bash
+sudo apt update
+sudo apt install git
+git --version
+cd ~/Downloads
+git clone https://github.com/purgy/multi_monitor.git
+sudo apt install pipx
+pipx install ~/Downloads/multi_monitor/
+multi_monitor
+```
+
+Default config file will be created: ~/multi_monitor_config.yaml
+
 ## ru
 ### Возможности
 + Перемещение курсора мыши между мониторами с помощью горячих клавиш
@@ -21,3 +36,18 @@ Default hotkeys:
 + перемещение курсора мыши на следующий монитор: <ctrl>+<cmd>+<право>
 + перемещение курсора мыши на предыдущий монитор: <ctrl>+<cmd>+<лево>
 + выход: <ctrl>+<f12>
+
+### Запуск
+#### Ubuntu
+```bash
+sudo apt update
+sudo apt install git
+git --version
+cd ~/Downloads
+git clone https://github.com/purgy/multi_monitor.git
+sudo apt install pipx
+pipx install ~/Downloads/multi_monitor/
+multi_monitor
+```
+
+Будет создан файл настроек по умолчанию: ~/multi_monitor_config.yaml
