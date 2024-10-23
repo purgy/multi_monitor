@@ -11,5 +11,5 @@ monitor numbers:
     HDMI-0: 1
   DP-4:
     DP-4: 0
-padding: 100  # 100 - for testing on single monitor
-# padding: 3
+# padding: 100  # 100 - for testing on single monitor
+padding: 3
